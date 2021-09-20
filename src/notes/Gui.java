@@ -7,7 +7,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -33,7 +35,15 @@ public class Gui extends JFrame implements ActionListener{
 		this.setVisible(true);
 	}
 	
+	public void addNote(Note note) {
+		String type = note.getType();
+		if(type == "text") notePanel.add((TextNote)note);
+		notePanel.revalidate();
+		notePanel.repaint();
+	}
+	
 	public void removeNote(Note note) {
+		control.removeNote(note);
 		notePanel.remove(note);
 		notePanel.revalidate();
 		notePanel.repaint();
@@ -64,6 +74,7 @@ public class Gui extends JFrame implements ActionListener{
 				if (e.getClickCount() == 2) {
 					Note n = new TextNote(self);
 					n.setBounds(e.getX(), e.getY(), 300, 300);
+					control.addNote(n);
 					notePanel.add(n);
 					notePanel.revalidate();
 					notePanel.repaint();
@@ -78,6 +89,19 @@ public class Gui extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		JFileChooser chooser = new JFileChooser();
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		chooser.setAcceptAllFileFilterUsed(false);
+		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+		   	try {
+		   		if(e.getActionCommand() == "Save") {
+		   			control.saveNotes(chooser.getSelectedFile().getPath());
+		   		}else {
+		   			control.loadNotes(chooser.getSelectedFile().getPath());
+		   		}
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
-	
 }

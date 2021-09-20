@@ -18,6 +18,7 @@ public class Note extends JPanel{
 	private static final long serialVersionUID = 3968723015592708693L;
 	private Gui gui;
 	private Note self;
+	protected JTextField titleField;
 	protected String type;
 
 	public Note(Gui gui) {
@@ -35,12 +36,22 @@ public class Note extends JPanel{
 		
 		JPanel titlePanel = new JPanel(new BorderLayout());
 		JButton deleteButton = new JButton("X");
-		JTextField titleField = new JTextField();
+		titleField = new JTextField();
 		deleteButton.addActionListener(deleteListener);
 		titlePanel.add(deleteButton, BorderLayout.EAST);
 		titlePanel.add(titleField, BorderLayout.CENTER);
 		
 		this.add(titlePanel, BorderLayout.NORTH);
+	}
+	
+	public String getType() {
+		return this.type;
+	}
+	
+	public String[] getRecreationData() {
+		String[] data = new String[1];
+		data[0] = type;
+		return data;
 	}
 	
 	public class DragHandler extends MouseAdapter {
