@@ -25,6 +25,8 @@ public class Control {
 	}
 
 	public void loadNotes(String path) throws IOException {
+		gui.clear();
+		data.clear();
 		data.loadNotes(path, gui);
 		for (Note note : data.getNotes()) {
 			gui.addNote(note);

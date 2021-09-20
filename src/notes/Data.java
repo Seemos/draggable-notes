@@ -15,6 +15,10 @@ public class Data {
 		notes = new ArrayList<>();
 	}
 	
+	public void clear() {
+		this.notes = new ArrayList<>();
+	}
+	
 	public void addNote(Note note) {
 		this.notes.add(note);
 	}

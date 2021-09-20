@@ -1,5 +1,6 @@
 package notes;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -33,6 +34,14 @@ public class Gui extends JFrame implements ActionListener{
 		this.buildMenu();
 		this.buildContent();
 		this.setVisible(true);
+	}
+	
+	public void clear() {
+		for(Component component : notePanel.getComponents()) {
+			notePanel.remove(component);
+		}
+		notePanel.revalidate();
+		notePanel.repaint();
 	}
 	
 	public void addNote(Note note) {
