@@ -10,9 +10,11 @@ import java.util.ArrayList;
 public class Data {
 	
 	private ArrayList<Note> notes;
+	private String activeDirectory;
 	
 	public Data() {
 		notes = new ArrayList<>();
+		activeDirectory = "";
 	}
 	
 	public void clear() {
@@ -24,10 +26,17 @@ public class Data {
 	}
 	
 	public void removeNote(Note note) {
+		if(!activeDirectory.equals("")) {
+			String type = note.getRecreationData()[0];
+			String id = note.getRecreationData()[1];
+			File noteFile = new File(activeDirectory, type+id+".txt");
+			noteFile.delete();
+		}
 		this.notes.remove(note);
 	}
 	
 	public void saveNotes(String path) throws IOException {
+		activeDirectory = path;
 		for(Note note : notes) {
 			String type = note.getRecreationData()[0];
 			if(type.equals("text")) {
@@ -43,6 +52,7 @@ public class Data {
 	}
 	
 	public void loadNotes(String path, Gui gui) throws IOException{
+		activeDirectory = path;
 		ArrayList<File> files = getNoteFiles(path);
 		for(File file : files) {
 			FileReader reader = new FileReader(file);
