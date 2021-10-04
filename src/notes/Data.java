@@ -61,17 +61,18 @@ public class Data {
             for(String line; (line = bReader.readLine()) != null; ) {
                 lines.add(line);
             }
+            Note note = null;
             if(lines.get(0).equals("text")) {
-            	int x = Integer.parseInt(lines.get(2));
-            	int y = Integer.parseInt(lines.get(3));
-            	int h = Integer.parseInt(lines.get(4));
-            	int w = Integer.parseInt(lines.get(5));
             	String title = lines.get(6);
             	String content = lines.get(7).replace("\\n", "\n");
-            	TextNote note = new TextNote(gui, title, content);
-            	note.setBounds(x, y, w, h);
-            	notes.add(note);
+            	note = new TextNote(gui, title, content);
             }
+            int x = Integer.parseInt(lines.get(2));
+        	int y = Integer.parseInt(lines.get(3));
+        	int h = Integer.parseInt(lines.get(4));
+        	int w = Integer.parseInt(lines.get(5));
+        	note.setBounds(x, y, w, h);
+        	notes.add(note);
 	    }
 	}
 	
