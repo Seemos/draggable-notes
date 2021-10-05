@@ -10,6 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -19,38 +20,41 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 
-public class Gui extends JFrame implements ActionListener{
-	
+public class Gui extends JFrame implements ActionListener {
+
 	private static final long serialVersionUID = 1150016143897079156L;
 	private Control control;
 	private Gui self;
 	private JPanel notePanel;
-	
+	private String mode;
+
 	public Gui(Control control) {
 		this.control = control;
 		this.self = this;
+		this.mode = "text";
 		this.setSize(800, 600);
 		this.setResizable(true);
 		this.buildMenu();
 		this.buildContent();
 		this.setVisible(true);
 	}
-	
+
 	public void clear() {
-		for(Component component : notePanel.getComponents()) {
+		for (Component component : notePanel.getComponents()) {
 			notePanel.remove(component);
 		}
 		notePanel.revalidate();
 		notePanel.repaint();
 	}
-	
+
 	public void addNote(Note note) {
 		String type = note.getType();
-		if(type == "text") notePanel.add((TextNote)note);
+		if (type == "text")
+			notePanel.add((TextNote) note);
 		notePanel.revalidate();
 		notePanel.repaint();
 	}
-	
+
 	public void removeNote(Note note) {
 		control.removeNote(note);
 		notePanel.remove(note);
@@ -65,11 +69,20 @@ public class Gui extends JFrame implements ActionListener{
 		JMenuItem itemLoad = new JMenuItem("Open");
 		itemSave.addActionListener(this);
 		itemLoad.addActionListener(this);
-		itemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
-		itemLoad.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		itemSave.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+		itemLoad.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		menuFile.add(itemSave);
 		menuFile.add(itemLoad);
 		menuBar.add(menuFile);
+
+		String[] modeSeletions = { "text", "image" };
+		JComboBox<String> modeSelection = new JComboBox<>(modeSeletions);
+		modeSelection.setActionCommand("changeMode");
+		modeSelection.setSelectedIndex(0);
+		modeSelection.addActionListener(this);
+		menuBar.add(modeSelection);
 		setJMenuBar(menuBar);
 	}
 
@@ -81,7 +94,15 @@ public class Gui extends JFrame implements ActionListener{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
-					Note n = new TextNote(self);
+					Note n = null;
+					switch(mode) {
+					case "text":
+						n = new TextNote(self);
+						break;
+					case "image":
+						n = new ImageNote(self);
+						break;
+					}
 					n.setBounds(e.getX(), e.getY(), 300, 300);
 					control.addNote(n);
 					notePanel.add(n);
@@ -97,19 +118,23 @@ public class Gui extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		JFileChooser chooser = new JFileChooser();
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooser.setAcceptAllFileFilterUsed(false);
-		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
-		   	try {
-		   		if(e.getActionCommand() == "Save") {
-		   			control.saveNotes(chooser.getSelectedFile().getPath());
-		   		}else {
-		   			control.loadNotes(chooser.getSelectedFile().getPath());
-		   		}
-			} catch (IOException e1) {
-				e1.printStackTrace();
+		if (e.getActionCommand() == "changeMode") {
+			mode = (String) ((JComboBox<String>) (e.getSource())).getSelectedItem();
+			System.out.println(mode);
+		} else {
+			JFileChooser chooser = new JFileChooser();
+			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			chooser.setAcceptAllFileFilterUsed(false);
+			if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+				try {
+					if (e.getActionCommand() == "Save") {
+						control.saveNotes(chooser.getSelectedFile().getPath());
+					} else {
+						control.loadNotes(chooser.getSelectedFile().getPath());
+					}
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		}
 	}
