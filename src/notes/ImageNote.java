@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
 import java.io.File;
 import java.io.IOException;
 
@@ -20,6 +21,7 @@ public class ImageNote extends Note {
 	private static int numberOfNotes;
 	private JPanel contentPanel;
 	private BufferedImage image;
+	private int noteID;
 
 	public ImageNote(Gui gui) {
 		this(gui, "", "");
@@ -50,14 +52,11 @@ public class ImageNote extends Note {
 		});
 
 		numberOfNotes++;
+		this.noteID = numberOfNotes;
 		this.type = "image";
 		this.titleField.setText(title);
 		this.add(contentPanel, BorderLayout.CENTER);
 		this.setVisible(true);
-	}
-
-	public Image getImage() {
-		return image;
 	}
 
 	private void loadImage(File imageFile) throws IOException {
@@ -92,5 +91,22 @@ public class ImageNote extends Note {
 
 		Image resizedImage = image.getScaledInstance(wImage, hImage, Image.SCALE_DEFAULT);
 		return resizedImage;
+	}
+	
+	public BufferedImage getImage() {
+		return image;
+	}
+	
+	public String[] getRecreationData() {
+		String[] data = new String[8];
+		data[0] = type;
+		data[1] = Integer.toString(noteID);
+		data[2] = Integer.toString(getX());
+		data[3] = Integer.toString(getY());
+		data[4] = Integer.toString(getHeight());
+		data[5] = Integer.toString(getWidth());
+		data[6] = titleField.getText();
+		data[7] = data[0]+data[1]+".jpg";
+		return data;
 	}
 }

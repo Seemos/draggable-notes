@@ -7,6 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+
 public class Data {
 	
 	private ArrayList<Note> notes;
@@ -46,6 +48,17 @@ public class Data {
 				for(String value : data) {
 					writer.write(value + "\n");
 				}
+				writer.close();
+			}
+			else {
+				String[] data = ((ImageNote)note).getRecreationData();
+				String filename = data[0] + data[1] + ".txt";
+				FileWriter writer = new FileWriter(new File(path, filename));
+				for(String value : data) {
+					writer.write(value + "\n");
+				}
+				File imageFile = new File(path, data[7]);
+				ImageIO.write(((ImageNote)note).getImage(), "jpg", imageFile);
 				writer.close();
 			}
 		}
