@@ -37,6 +37,9 @@ public class ImageNote extends Note {
 					chooser.setAcceptAllFileFilterUsed(true);
 					if (chooser.showOpenDialog(contentPanel) == JFileChooser.APPROVE_OPTION) {
 						try {
+							contentPanel.removeAll();
+							contentPanel.revalidate();
+							contentPanel.repaint();
 							loadImage(chooser.getSelectedFile());
 						} catch (IOException e1) {
 							e1.printStackTrace();
