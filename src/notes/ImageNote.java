@@ -115,7 +115,8 @@ public class ImageNote extends Note {
 		data[4] = Integer.toString(getHeight());
 		data[5] = Integer.toString(getWidth());
 		data[6] = titleField.getText();
-		data[7] = data[0]+data[1]+".jpg";
+		if(!(null == image)) data[7] = data[0]+data[1]+".jpg";
+		else data[7] = "";
 		return data;
 	}
 }

@@ -57,8 +57,10 @@ public class Data {
 				for(String value : data) {
 					writer.write(value + "\n");
 				}
-				File imageFile = new File(path, data[7]);
-				ImageIO.write(((ImageNote)note).getImage(), "jpg", imageFile);
+				if(!"".equals(data[7])){
+					File imageFile = new File(path, data[7]);
+					ImageIO.write(((ImageNote)note).getImage(), "jpg", imageFile);
+				}
 				writer.close();
 			}
 		}
