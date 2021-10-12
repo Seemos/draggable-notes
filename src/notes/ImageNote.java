@@ -5,7 +5,6 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
 import java.io.File;
 import java.io.IOException;
 
@@ -24,10 +23,10 @@ public class ImageNote extends Note {
 	private int noteID;
 
 	public ImageNote(Gui gui) {
-		this(gui, "", "");
+		this(gui, "", "", "");
 	}
 
-	public ImageNote(Gui gui, String title, String imagePath) {
+	public ImageNote(Gui gui, String title, String imgDirectory, String imgName) {
 		super(gui);
 
 		contentPanel = new JPanel();
@@ -50,6 +49,16 @@ public class ImageNote extends Note {
 				}
 			}
 		});
+
+		if(!"".equals(imgName)){
+			contentPanel.setSize(280, 280);
+			File imgFile = new File(imgDirectory, imgName);
+			try {
+				loadImage(imgFile);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
 
 		numberOfNotes++;
 		this.noteID = numberOfNotes;

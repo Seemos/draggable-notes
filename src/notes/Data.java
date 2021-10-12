@@ -80,12 +80,18 @@ public class Data {
             	String content = lines.get(7).replace("\\n", "\n");
             	note = new TextNote(gui, title, content);
             }
+			if(lines.get(0).equals("image")){
+				String title = lines.get(6);
+				String imgName = lines.get(7);
+				note = new ImageNote(gui, title, path, imgName);
+			}
             int x = Integer.parseInt(lines.get(2));
         	int y = Integer.parseInt(lines.get(3));
         	int h = Integer.parseInt(lines.get(4));
         	int w = Integer.parseInt(lines.get(5));
         	note.setBounds(x, y, w, h);
         	notes.add(note);
+			bReader.close();
 	    }
 	}
 	

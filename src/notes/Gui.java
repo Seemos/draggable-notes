@@ -49,8 +49,12 @@ public class Gui extends JFrame implements ActionListener {
 
 	public void addNote(Note note) {
 		String type = note.getType();
-		if (type == "text")
+		if (type.equals("text")){
 			notePanel.add((TextNote) note);
+		}
+		else if(type.equals("image")){
+			notePanel.add((ImageNote) note);
+		}
 		notePanel.revalidate();
 		notePanel.repaint();
 	}
@@ -120,7 +124,6 @@ public class Gui extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "changeMode") {
 			mode = (String) ((JComboBox<String>) (e.getSource())).getSelectedItem();
-			System.out.println(mode);
 		} else {
 			JFileChooser chooser = new JFileChooser();
 			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
